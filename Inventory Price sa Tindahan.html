@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edith Store Price List</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --secondary: #3a0ca3;
+      --accent: #f72585;
+      --light-bg: #f8f9fa;
+      --light-text: #212529;
+      --light-card: #ffffff;
+      --light-border: #dee2e6;
+      --dark-bg: #121826;
+      --dark-text: #e9ecef;
+      --dark-card: #1b263b;
+      --dark-border: #2c3d5a;
+      --success: #4cc9f0;
+      --warning: #f9c74f;
+      --danger: #ff6b6b;
+      --gray: #adb5bd;
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+
+    .light-mode {
+      --bg: var(--light-bg);
+      --text: var(--light-text);
+      --card-bg: var(--light-card);
+      --border: var(--light-border);
+      --header-bg: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+      --footer-bg: linear-gradient(135deg, #3a0ca3 0%, #2d3a5c 100%);
+    }
+
+    .dark-mode {
+      --bg: var(--dark-bg);
+      --text: var(--dark-text);
+      --card-bg: var(--dark-card);
+      --border: var(--dark-border);
+      --header-bg: linear-gradient(135deg, #3a0ca3 0%, #212529 100%);
+      --footer-bg: linear-gradient(135deg, #212529 0%, #121826 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: var(--transition);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    /* PC Mode Styles */
+    .pc-mode .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .pc-mode .item {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin-bottom: 0.75rem;
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .pc-mode .item-checkbox {
+      margin-right: 0.5rem;
+    }
+
+    .pc-mode .item-info {
+      flex: 1;
+    }
+
+    .pc-mode .item-quantity {
+      margin: 0 1rem;
+    }
+
+    .pc-mode .item-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .pc-mode .add-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Mobile Mode Styles */
+    .mobile-mode .container {
+      max-width: 500px;
+      margin: 1rem auto;
+      padding: 0 1rem;
+    }
+
+    .mobile-mode .item {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin-bottom: 0.75rem;
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      gap: 0.75rem;
+    }
+
+    .mobile-mode .item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .mobile-mode .item-checkbox {
+      margin-right: 0.5rem;
+    }
+
+    .mobile-mode .item-info {
+      flex: 1;
+    }
+
+    .mobile-mode .item-quantity {
+      margin: 0 0.5rem;
+    }
+
+    .mobile-mode .item-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      width: 100%;
+    }
+
+    .mobile-mode .add-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Common Styles */
+    header {
+      background: var(--header-bg);
+      padding: 1.2rem;
+      text-align: center;
+      color: white;
+      box-shadow: var(--shadow);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo i {
+      color: var(--accent);
+    }
+
+    .subtitle {
+      font-weight: 300;
+      opacity: 0.9;
+    }
+
+    .mode-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .view-switch, .theme-switch {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 20px;
+      padding: 8px 15px;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .view-switch:hover, .theme-switch:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .search-container {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-container i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 12px 15px 12px 45px;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      background: var(--card-bg);
+      color: var(--text);
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    }
+
+    .item-checkbox input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .item-name {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .item-price {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .item-quantity input {
+      width: 60px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-align: center;
+      font-weight: 600;
+      background: var(--card-bg);
+      color: var(--text);
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 0.85rem;
+    }
+
+    .btn-edit {
+      background: var(--warning);
+      color: #000;
+    }
+
+    .btn-delete {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-add {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .add-form input {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 1rem;
+      background: var(--card-bg);
+      color: var(--text);
+    }
+
+    .add-form input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    }
+
+    .total-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--footer-bg);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .total-amount {
+      color: var(--accent);
+      font-size: 1.5rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: var(--gray);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--border);
+    }
+
+    @media (max-width: 768px) {
+      .header-top {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .mode-controls {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .mobile-mode .item-actions {
+        flex-direction: row;
+      }
+    }
+
+    .save-notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--success);
+      color: white;
+      padding: 10px 15px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .save-notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="light-mode pc-mode">
+  <header>
+    <div class="header-top">
+      <div class="logo">
+        <i class="fas fa-store"></i>
+        <span>Edith Store</span>
+      </div>
+      <div class="mode-controls">
+        <button class="theme-switch" id="themeSwitch">
+          <i class="fas fa-moon"></i> Dark Mode
+        </button>
+        <button class="view-switch" id="viewSwitch">
+          <i class="fas fa-mobile"></i> Mobile Mode
+        </button>
+      </div>
+    </div>
+    <div class="subtitle">Price List & Inventory - Auto-Saved</div>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" class="search-box" id="search" placeholder="Search items...">
+      </div>
+
+      <div id="itemList">
+        <!-- Items will be rendered here -->
+      </div>
+
+      <div class="add-form">
+        <input type="text" id="newItem" placeholder="Item name">
+        <input type="number" id="newPrice" placeholder="Price (₱)" min="0" step="0.01">
+        <button class="btn btn-add" onclick="addItem()">
+          <i class="fas fa-plus"></i> Add Item
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-bar">
+    <span>Total:</span>
+    <span class="total-amount">₱<span id="totalPrice">0</span></span>
+  </div>
+
+  <div class="save-notification" id="saveNotification">
+    <i class="fas fa-check-circle"></i>
+    <span>Changes saved!</span>
+  </div>
+
+  <script>
+    // Load items from localStorage or use default items
+    let items = JSON.parse(localStorage.getItem("storeItems")) || [
+      { name: "Coke Mismo", price: 25 },
+      { name: "Sardines", price: 20 },
+      { name: "Instant Noodles", price: 15 },
+      { name: "Rice 1kg", price: 45 },
+      { name: "Cooking Oil", price: 60 },
+      { name: "Eggs (dozen)", price: 70 },
+      { name: "Bread", price: 35 },
+      { name: "Coffee 3-in-1", price: 10 }
+    ];
+
+    // Store checkbox states and quantities
+    let itemStates = JSON.parse(localStorage.getItem("itemStates")) || {};
+
+    // Theme switching functionality
+    const themeSwitch = document.getElementById('themeSwitch');
+    const viewSwitch = document.getElementById('viewSwitch');
+    const body = document.body;
+    const saveNotification = document.getElementById('saveNotification');
+    
+    // Check for saved theme preference
+    if (localStorage.getItem('theme') === 'dark') {
+      body.classList.replace('light-mode', 'dark-mode');
+      themeSwitch.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+    }
+    
+    // Check for saved view preference
+    if (localStorage.getItem('view') === 'mobile') {
+      body.classList.replace('pc-mode', 'mobile-mode');
+      viewSwitch.innerHTML = '<i class="fas fa-desktop"></i> PC Mode';
+    }
+    
+    themeSwitch.addEventListener('click', () => {
+      if (body.classList.contains('light-mode')) {
+        body.classList.replace('light-mode', 'dark-mode');
+        localStorage.setItem('theme', 'dark');
+        themeSwitch.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+      } else {
+        body.classList.replace('dark-mode', 'light-mode');
+        localStorage.setItem('theme', 'light');
+        themeSwitch.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+      }
+    });
+    
+    viewSwitch.addEventListener('click', () => {
+      if (body.classList.contains('pc-mode')) {
+        body.classList.replace('pc-mode', 'mobile-mode');
+        localStorage.setItem('view', 'mobile');
+        viewSwitch.innerHTML = '<i class="fas fa-desktop"></i> PC Mode';
+      } else {
+        body.classList.replace('mobile-mode', 'pc-mode');
+        localStorage.setItem('view', 'pc');
+        viewSwitch.innerHTML = '<i class="fas fa-mobile"></i> Mobile Mode';
+      }
+      renderItems();
+    });
+
+    function showSaveNotification() {
+      saveNotification.classList.add('show');
+      setTimeout(() => {
+        saveNotification.classList.remove('show');
+      }, 2000);
+    }
+
+    function saveItems() {
+      localStorage.setItem("storeItems", JSON.stringify(items));
+      localStorage.setItem("itemStates", JSON.stringify(itemStates));
+      showSaveNotification();
+    }
+
+    function renderItems() {
+      const itemList = document.getElementById("itemList");
+      const search = document.getElementById("search").value.toLowerCase();
+      const isMobileMode = body.classList.contains('mobile-mode');
+      const filteredItems = items.filter(item => 
+        item.name.toLowerCase().includes(search)
+      );
+      
+      itemList.innerHTML = "";
+      
+      if (filteredItems.length === 0) {
+        itemList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <p>No items found. Try a different search or add a new item.</p>
+          </div>
+        `;
+        updateTotal();
+        return;
+      }
+      
+      filteredItems.forEach((item, index) => {
+        const originalIndex = items.findIndex(i => i.name === item.name && i.price === item.price);
+        const div = document.createElement("div");
+        div.className = "item";
+        
+        // Get saved state for this item
+        const itemId = `item-${originalIndex}`;
+        const isChecked = itemStates[itemId] ? itemStates[itemId].checked : false;
+        const quantity = itemStates[itemId] ? itemStates[itemId].quantity : 1;
+        
+        if (isMobileMode) {
+          // Mobile layout
+          div.innerHTML = `
+            <div class="item-row">
+              <div style="display: flex; align-items: center;">
+                <div class="item-checkbox">
+                  <input type="checkbox" onchange="updateItemState('${itemId}', this.checked, ${originalIndex})" ${isChecked ? 'checked' : ''}>
+                </div>
+                <div class="item-info">
+                  <div class="item-name">${item.name}</div>
+                  <div class="item-price">₱${item.price.toFixed(2)}</div>
+                </div>
+              </div>
+              <div class="item-quantity">
+                <input type="number" min="1" value="${quantity}" onchange="updateItemState('${itemId}', ${isChecked}, ${originalIndex}, this.value)">
+              </div>
+            </div>
+            <div class="item-actions">
+              <button class="btn btn-edit btn-sm" onclick="editItem(${originalIndex})">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn btn-delete btn-sm" onclick="deleteItem(${originalIndex})">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          `;
+        } else {
+          // PC layout
+          div.innerHTML = `
+            <div class="item-checkbox">
+              <input type="checkbox" onchange="updateItemState('${itemId}', this.checked, ${originalIndex})" ${isChecked ? 'checked' : ''}>
+            </div>
+            <div class="item-info">
+              <div class="item-name">${item.name}</div>
+              <div class="item-price">₱${item.price.toFixed(2)}</div>
+            </div>
+            <div class="item-quantity">
+              <input type="number" min="1" value="${quantity}" onchange="updateItemState('${itemId}', ${isChecked}, ${originalIndex}, this.value)">
+            </div>
+            <div class="item-actions">
+              <button class="btn btn-edit btn-sm" onclick="editItem(${originalIndex})">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn btn-delete btn-sm" onclick="deleteItem(${originalIndex})">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          `;
+        }
+        
+        itemList.appendChild(div);
+      });
+      
+      updateTotal();
+    }
+
+    function updateItemState(itemId, isChecked, index, quantity = null) {
+      if (!itemStates[itemId]) {
+        itemStates[itemId] = { checked: false, quantity: 1 };
+      }
+      
+      if (quantity !== null) {
+        itemStates[itemId].quantity = parseInt(quantity) || 1;
+      } else {
+        itemStates[itemId].checked = isChecked;
+      }
+      
+      saveItems();
+      updateTotal();
+    }
+
+    function updateTotal() {
+      let total = 0;
+      const itemDivs = document.querySelectorAll("#itemList .item");
+      
+      itemDivs.forEach((div) => {
+        const checkbox = div.querySelector("input[type='checkbox']");
+        const qtyInput = div.querySelector("input[type='number']");
+        const qty = parseInt(qtyInput.value) || 1;
+        
+        if (checkbox.checked) {
+          // Find the actual item price
+          const itemName = div.querySelector(".item-name").textContent;
+          const item = items.find(item => item.name === itemName);
+          if (item) {
+            total += item.price * qty;
+          }
+        }
+      });
+      
+      document.getElementById("totalPrice").textContent = total.toFixed(2);
+    }
+
+    function addItem() {
+      const nameInput = document.getElementById("newItem");
+      const priceInput = document.getElementById("newPrice");
+      
+      const name = nameInput.value.trim();
+      const price = parseFloat(priceInput.value);
+      
+      if (name && !isNaN(price) && price > 0) {
+        items.push({ name, price });
+        saveItems();
+        renderItems();
+        
+        // Clear inputs
+        nameInput.value = "";
+        priceInput.value = "";
+        nameInput.focus();
+      } else {
+        alert("Please enter a valid item name and price.");
+      }
+    }
+
+    function editItem(index) {
+      const item = items[index];
+      const newName = prompt("Edit item name:", item.name);
+      if (newName === null) return;
+      
+      const newPrice = prompt("Edit price:", item.price);
+      if (newPrice === null) return;
+      
+      if (newName && newPrice && !isNaN(parseFloat(newPrice)) && parseFloat(newPrice) > 0) {
+        items[index].name = newName;
+        items[index].price = parseFloat(newPrice);
+        saveItems();
+        renderItems();
+      } else {
+        alert("Please enter valid values.");
+      }
+    }
+
+    function deleteItem(index) {
+      if (confirm("Are you sure you want to delete this item?")) {
+        // Remove saved state for this item
+        const itemId = `item-${index}`;
+        if (itemStates[itemId]) {
+          delete itemStates[itemId];
+        }
+        
+        items.splice(index, 1);
+        saveItems();
+        renderItems();
+      }
+    }
+
+    // Initialize the app
+    document.getElementById("search").addEventListener("input", renderItems);
+    document.getElementById("newPrice").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") addItem();
+    });
+    document.getElementById("newItem").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") document.getElementById("newPrice").focus();
+    });
+    
+    // Auto-save before page unload
+    window.addEventListener('beforeunload', function() {
+      saveItems();
+    });
+    
+    renderItems();
+  </script>
+</body>
+</html>
